@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+indent() {
+  sed 's/^/       /'
+}
+
+arrow() {
+  sed 's/^/-----> /'
+}
+
+mkdir -p "$1/bin/"
+
+cp "bin/tokenize-proxy" "$1/bin/tokenize-proxy"
+chmod +x "$1/bin/tokenize-proxy"
+echo "Installed tokenize-proxy to app/bin" | indent
+
+exit 0
