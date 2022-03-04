@@ -12,6 +12,7 @@ arrow() {
 
 mkdir -p "$1/bin/"
 
+npm install
 cp "bin/tokenize" "$1/bin/tokenize"
 chmod +x "$1/bin/tokenize"
 echo "Installed tokenize to app/bin" | indent
