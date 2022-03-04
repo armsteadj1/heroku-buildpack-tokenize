@@ -6,7 +6,7 @@ end
 
 def self.start_app
   fork do
-    cmd = "PORT=#{app_port} #{ARGV.join(' ').sub(/#{ENV['PORT']}/, app_port.to_s)}"
+    cmd = "bin/rails server -p #{app_port} -e production"
     puts "buildpack=tokenize at=start-app cmd=#{cmd}"
     exec cmd
   end
