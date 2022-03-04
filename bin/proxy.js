@@ -10,7 +10,6 @@ const app = express();
 
 // Configuration
 const PORT = process.env.PORT;
-const HOST = "localhost";
 const API_SERVICE_URL = `http://localhost:${Number.parseInt(process.env.PORT,10)+1}/`;
 
 const tokenizeMiddleware = (options) => 
@@ -60,7 +59,7 @@ app.use('/', createProxyMiddleware({
 }));
 
 // Start Proxy
-app.listen(PORT, HOST, async () => {
+app.listen(PORT, async () => {
     bt = await new BasisTheory().init('key_4qUtg83MpoVnDemfJwbzcN'); 
     console.log(`THIS ISN'T RIGHT -- Starting Proxy at ${HOST}:${PORT}`);
 });
