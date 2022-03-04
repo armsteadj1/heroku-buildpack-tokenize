@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require("morgan");
 const { BasisTheory } = require('@basis-theory/basis-theory-js');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
 
 let bt;
 
@@ -35,20 +35,23 @@ const tokenizeMiddleware = (options) =>
     }   
   };
 
+  const routesToToken = {
+    "/users": ["the_number", "dope"]
+};
+
 // Logging
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(tokenizeMiddleware({"/users": ["the_number", "dope"]}));
+app.use(tokenizeMiddleware(routesToToken));
 
 // Proxy endpoints
 app.use('/', createProxyMiddleware({
     target: API_SERVICE_URL,
     changeOrigin: true,
+    selfHandleResponse: true,
     onProxyReq(proxyReq, req, res) {
       if (req.method == 'POST' && req.body) {
         const body = req.body;
-    
-        console.log(body);
 
         proxyReq.setHeader('content-length', JSON.stringify(body).length);
       
@@ -56,6 +59,22 @@ app.use('/', createProxyMiddleware({
         proxyReq.end();
       }
     },
+    onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+        const string = responseBuffer.toString('utf8');
+        const json = JSON.parse(string);
+        console.log(req.path)
+        
+        await Promise.all(
+            routesToToken[req.path]
+        .filter(item => Object.keys(json).includes(item))
+        .map(async (keyToTokenize) => {
+            const token = await bt.tokens.retrieve(json[keyToTokenize])
+    
+            json[keyToTokenize] = token.data;
+        }))
+        
+        return Buffer.from(JSON.stringify(json))
+      }),
 }));
 
 // Start Proxy
