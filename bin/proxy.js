@@ -62,5 +62,5 @@ app.use('/', createProxyMiddleware({
 // Start Proxy
 app.listen(PORT, HOST, async () => {
     bt = await new BasisTheory().init('key_4qUtg83MpoVnDemfJwbzcN'); 
-    console.log(`Starting Proxy at ${HOST}:${PORT}`);
+    console.log(`THIS ISN'T RIGHT -- Starting Proxy at ${HOST}:${PORT}`);
 });
