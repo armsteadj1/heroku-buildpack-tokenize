@@ -15,7 +15,7 @@ end
 def self.start_em_proxy
   fork do
     print_verbosely = ENV['EM_PROXY_VERBOSE'] == 'true'
-    cmd = "bundle exec em-proxy -l #{ENV['PORT']} -r '127.0.0.1:#{app_port}' -d '127.0.0.1:#{gor_port}' #{print_verbosely && '-v'} 2>&1 | sed -u 's/^/em-proxy: /g'"
+    cmd = "bundle exec em-proxy -l #{ENV['PORT']} -r '127.0.0.1:#{app_port}' #{print_verbosely && '-v'} 2>&1 | sed -u 's/^/em-proxy: /g'"
     puts "buildpack=tokenize at=start-em-proxy cmd=#{cmd}"
     exec cmd
   end
@@ -27,10 +27,10 @@ em_proxy_pid = start_em_proxy
 process_name = \
   case Process.wait
   when app_pid
-    Process.kill('INT', gor_pid, em_proxy_pid)
+    Process.kill('INT', em_proxy_pid)
     'app'
   when em_proxy_pid
-    Process.kill('INT', gor_pid, app_pid)
+    Process.kill('INT', app_pid)
     'em-proxy'
   end
 
