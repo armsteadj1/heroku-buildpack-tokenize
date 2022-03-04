@@ -14,7 +14,7 @@ mkdir -p "$1/bin/"
 
 npm install
 cp "bin/tokenize" "$1/bin/tokenize"
-cp "bin/proxy.js" "$1/bin/proxy.js"
+cp "bin/proxy.js" "$1/proxy.js"
 chmod +x "$1/bin/tokenize"
 echo "Installed tokenize to app/bin" | indent
 
