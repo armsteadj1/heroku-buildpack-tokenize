@@ -9,9 +9,9 @@ let bt;
 const app = express();
 
 // Configuration
-const PORT = 3000;
+const PORT = process.env.PORT;
 const HOST = "localhost";
-const API_SERVICE_URL = "http://localhost:3001/";
+const API_SERVICE_URL = `http://localhost:${Number.parseInt(process.env.PORT,10)+1}/`;
 
 const tokenizeMiddleware = (options) => 
   (req, res, next) => {
