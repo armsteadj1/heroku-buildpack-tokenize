@@ -14,9 +14,8 @@ end
 
 def self.start_em_proxy
   fork do
-    print_verbosely = ENV['EM_PROXY_VERBOSE'] == 'true'
-    cmd = "bundle exec em-proxy -l #{ENV['PORT']} -r '127.0.0.1:#{app_port}' #{print_verbosely && '-v'} 2>&1 | sed -u 's/^/em-proxy: /g'"
-    puts "buildpack=tokenize at=start-em-proxy cmd=#{cmd}"
+    cmd = "node proxy.js"
+    puts "buildpack=tokenize at=start-proxy cmd=#{cmd}"
     exec cmd
   end
 end
